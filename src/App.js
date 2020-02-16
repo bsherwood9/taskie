@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { connect } from "react-redux";
 import { DragDropContext } from "react-beautiful-dnd";
+import { sort } from "./actions/listActions";
 
 //imports
 import TaskList from "./components/TaskList";
@@ -10,7 +11,21 @@ import AddButton from "./components/AddCardButton";
 
 function App(props) {
   console.log(props.lists);
-  const onDragEnd = () => {};
+  const onDragEnd = result => {
+    const { destination, source, draggableId } = result;
+    if (!destination) {
+      return;
+    }
+    props.dispatch(
+      sort(
+        source.droppableId,
+        destination.droppableId,
+        source.index,
+        destination.index,
+        draggableId
+      )
+    );
+  };
   return (
     <DragDropContext onDragEnd>
       <div>
